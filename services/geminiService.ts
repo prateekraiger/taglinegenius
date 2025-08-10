@@ -1,4 +1,3 @@
-
 import { GoogleGenAI, Type } from "@google/genai";
 
 // Initialize the Gemini client.
@@ -10,17 +9,21 @@ const responseSchema = {
   properties: {
     taglines: {
       type: Type.ARRAY,
-      description: "A list of 5 god-tier, viral-worthy titles for a Valorant clip.",
+      description:
+        "A list of 5 god-tier, viral-worthy titles for a Valorant clip.",
       items: {
         type: Type.STRING,
-        description: "A single title, using Valorant slang and relevant emojis. It must be short, punchy, and aggressive."
-      }
-    }
+        description:
+          "A single title, using Valorant slang and relevant emojis. It must be short, punchy, and aggressive.",
+      },
+    },
   },
-  required: ['taglines']
+  required: ["taglines"],
 };
 
-export const generateTaglines = async (userInput: string): Promise<string[]> => {
+export const generateTaglines = async (
+  userInput: string
+): Promise<string[]> => {
   if (!userInput.trim()) {
     return [];
   }
@@ -50,16 +53,16 @@ Now, analyze the user's input. If it seems like esports, prioritize the esports 
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: "gemini-2.5-flash",
       contents: prompt,
       config: {
         responseMimeType: "application/json",
         responseSchema: responseSchema,
         temperature: 0.9,
         topP: 0.95,
-      }
+      },
     });
-    
+
     const jsonString = response.text;
     const parsed = JSON.parse(jsonString);
 
@@ -67,16 +70,24 @@ Now, analyze the user's input. If it seems like esports, prioritize the esports 
       return parsed.taglines;
     } else {
       console.error("API response is not in the expected format:", parsed);
-      return ["Sorry, I couldn't generate taglines in the right format. Please try rephrasing."];
+      return [
+        "Sorry, I couldn't generate taglines in the right format. Please try rephrasing.",
+      ];
     }
-
   } catch (error) {
     console.error("Error generating taglines:", error);
     if (error instanceof Error) {
-        if (error.message.includes("API_KEY_INVALID") || error.message.includes("API key")) {
-             return ["There is an issue with the API Key. Please check the configuration."];
-        }
+      if (
+        error.message.includes("API_KEY_INVALID") ||
+        error.message.includes("API key")
+      ) {
+        return [
+          "There is an issue with the API Key. Please check the configuration.",
+        ];
+      }
     }
-    return ["An error occurred while generating taglines. Please try again later."];
+    return [
+      "An error occurred while generating taglines. Please try again later.",
+    ];
   }
 };
