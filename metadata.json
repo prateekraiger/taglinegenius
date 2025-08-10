@@ -1,0 +1,5 @@
+{
+  "name": "TaglineGenius",
+  "description": "An AI-powered web app that takes user-provided Valorant clip ideas and generates catchy, viral-worthy headlines designed to maximize views on TikTok, Reels, and Shorts.",
+  "requestFramePermissions": []
+}
